@@ -51,27 +51,28 @@ This is an array with six elements, one for each LED under the keys. Each elemen
 ### KEY_ACTION_TYPE
 This is the type of action each key will perform. It is an array with seven elements, these represent the (up to) six keys and the encoder button. If your device has fewer than six keys, the encoder button will still be the 
 seventh entry, just ignore the entries that represent buttons you do not have. The options are as follows:
-- **ACTION_TYPE_NONE**: No action will be performed
-- **ACTION_TYPE_KEY_DOWN_UP**: This acts like a keyboard key press. A key value and optional modifier keys will be pressed when the key is pressed and will be released when the key is released
-- **ACTION_TYPE_STRING**: This will act like a keyboard writing a string when the key is pressed down. No action is performed when the key is released
-- **ACTION_TYPE_MOUSE_CLICK**: This acts like a mouse clicking and releasing a button when the key is pressed. No action is performed when the key is released
-- **ACTION_TYPE_MOUSE_DOWN_UP**: This acts like a mouse clicking a button when the key is pressed. The mouse button is released when the key is released
-- **ACTION_TYPE_MOUSE_DOUBLE_CLICK**: This acts like a mouse double-clicking a button when the key is pressed. No action is performed when the key is released
-- **ACTION_TYPE_MOUSE_TOGGLE**: This acts like a mouse clicking a button when the key is pressed. The button will remain pressed (and the LED will stay active) until the key is pressed again. This is useful for simulating a middle click button in CAD software so you can pan without holding a button down
+- `ACTION_TYPE_NONE`: No action will be performed
+- `ACTION_TYPE_KEY_PRESS`: This sends both the press and release key commands on key down. This prevents repeated key presses if the key is held down. No action is performed when the key is released
+- `ACTION_TYPE_KEY_DOWN_UP`: This acts like a keyboard key press. A key value and optional modifier keys will be pressed when the key is pressed and will be released when the key is released. This allows repeated key presses as long as the key is held down
+- `ACTION_TYPE_STRING`: This will act like a keyboard writing a string when the key is pressed down. No action is performed when the key is released
+- `ACTION_TYPE_MOUSE_CLICK`: This acts like a mouse clicking and releasing a button when the key is pressed. No action is performed when the key is released
+- `ACTION_TYPE_MOUSE_DOUBLE_CLICK`: This acts like a mouse double-clicking a button when the key is pressed. No action is performed when the key is released
+- `ACTION_TYPE_MOUSE_DOWN_UP`: This acts like a mouse clicking a button when the key is pressed. The mouse button is released when the key is released
+- `ACTION_TYPE_MOUSE_TOGGLE`: This acts like a mouse clicking a button when the key is pressed. The button will remain pressed (and the LED will stay active) until the key is pressed again. This is useful for simulating a middle click button in CAD software so you can pan without holding a button down
 
 
 ### KEY_MODIFIER_KEYS
-If a key action has been set as `ACTION_TYPE_KEY_DOWN_UP`, then you can use this to assign which modifier keys (`Control`, `Shift`, `Alt`/`Option`, `GUI`/`Windows`/`Command`) are sent along with the key press. The options are:
-- MODIFIER_NONE
-- MODIFIER_CTRL
-- MODIFIER_SHIFT
-- MODIFIER_ALT
-- MODIFIER_GUI
+If a key action has been set as `ACTION_TYPE_KEY_PRESS` or `ACTION_TYPE_KEY_DOWN_UP`, then you can use this to assign which modifier keys (`Control`, `Shift`, `Alt`/`Option`, `GUI`/`Windows`/`Command`) are sent along with the key press. The options are:
+- `MODIFIER_NONE`
+- `MODIFIER_CTRL`
+- `MODIFIER_SHIFT`
+- `MODIFIER_ALT`
+- `MODIFIER_GUI`
 
 You can send multiple modifier keys by `OR`ing them together: `MODIFIER_CTRL | MODIFIER_SHIFT` will send `Control` and `Shift`
 
 ### KEY_VALUE
-If a key action has been set as `ACTION_TYPE_KEY_DOWN_UP`, then you can use this to assign which key will be sent along with the optional modifier keys. This can be a single ASCII character like `'a'` or `'c'`, or it can be a special key,
+If a key action has been set as `ACTION_TYPE_KEY_PRESS` or `ACTION_TYPE_KEY_DOWN_UP`, then you can use this to assign which key will be sent along with the optional modifier keys. This can be a single ASCII character like `'a'` or `'c'`, or it can be a special key,
 defined in `src/USBHIDKeyboardMouse.h`, such as `KEY_UP_ARROW`, `KEY_RETURN` or `KEY_F1`
 
 ### KEY_STRING
@@ -79,12 +80,12 @@ If a key action has been set to `ACTION_TYPE_STRING`, then you can define the st
 
 ### KEY_MOUSE_BUTTON
 If a key action has been set to `ACTION_TYPE_MOUSE_CLICK`, `ACTION_TYPE_MOUSE_DOUBLE_CLICK`, `ACTION_TYPE_MOUSE_DOWN_UP`, or `ACTION_TYPE_MOUSE_TOGGLE`, this will configure which button will be pressed. The options are:
-- **MOUSE_NONE** - This will not perform any action
-- **MOUSE_LEFT**
-- **MOUSE_MIDDLE**
-- **MOUSE_RIGHT**
+- `MOUSE_NONE` - This will not perform any action
+- `MOUSE_LEFT`
+- `MOUSE_MIDDLE`
+- `MOUSE_RIGHT`
 
 
 Additionally, there are two other configurable options:
-- **INVERT_SCROLLING**: This inverts the direction that scrolling occurs. You may find this useful depending on how your computer scrolling is configured
-- **ALLOW_BOOTLOADER**: This allows the device to be reprogrammed without taking it apart, but it also means that you cannot assign an action that requires holding the encoder button down for more than three seconds
+- `INVERT_SCROLLING`: This inverts the direction that scrolling occurs. You may find this useful depending on how your computer scrolling is configured
+- `ALLOW_BOOTLOADER`: This allows the device to be reprogrammed without taking it apart, but it also means that you cannot assign an action that requires holding the encoder button down for more than three seconds

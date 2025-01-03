@@ -24,12 +24,13 @@
 
 // Button Action Types
 #define ACTION_TYPE_NONE                0
-#define ACTION_TYPE_KEY_DOWN_UP         1
-#define ACTION_TYPE_STRING              2
-#define ACTION_TYPE_MOUSE_CLICK         3
-#define ACTION_TYPE_MOUSE_DOWN_UP       4
+#define ACTION_TYPE_KEY_PRESS           1
+#define ACTION_TYPE_KEY_DOWN_UP         2
+#define ACTION_TYPE_STRING              3
+#define ACTION_TYPE_MOUSE_CLICK         4
 #define ACTION_TYPE_MOUSE_DOUBLE_CLICK  5
-#define ACTION_TYPE_MOUSE_TOGGLE        6
+#define ACTION_TYPE_MOUSE_DOWN_UP       6
+#define ACTION_TYPE_MOUSE_TOGGLE        7
 
 // Additional Mouse/Key Types
 #define KEY_NONE          0
@@ -106,7 +107,7 @@ uint8_t KEY_ACTION_TYPE[MAX_KEYS_W_ENCODER] = {
   ACTION_TYPE_KEY_DOWN_UP, // Button 4 action type
   ACTION_TYPE_KEY_DOWN_UP, // Button 5 action type
   ACTION_TYPE_KEY_DOWN_UP, // Button 6 action type
-  ACTION_TYPE_KEY_DOWN_UP, // The last "key" is the encoder button, regardless of how many keys are present on a given device
+  ACTION_TYPE_KEY_PRESS, // The last "key" is the encoder button, regardless of how many keys are present on a given device
 };
 
 uint8_t KEY_MODIFIER_KEYS[MAX_KEYS_W_ENCODER] = {
@@ -230,18 +231,18 @@ void updateLed(uint8_t ledIndex, uint8_t r, uint8_t g, uint8_t b) {
 
 /*
  * Keyboard & Mouse Action Functions
- */
-void pressKey(uint8_t modifier_keys, char value) {
-  if (modifier_keys & MODIFIER_CTRL) {
+ */ 
+void pressKey(uint8_t modifierKeys, char value) {
+  if (modifierKeys & MODIFIER_CTRL) {
     Keyboard_press(KEY_LEFT_CTRL);
   }
-  if (modifier_keys & MODIFIER_SHIFT) {
+  if (modifierKeys & MODIFIER_SHIFT) {
     Keyboard_press(KEY_LEFT_SHIFT);
   }
-  if (modifier_keys & MODIFIER_ALT) {
+  if (modifierKeys & MODIFIER_ALT) {
     Keyboard_press(KEY_LEFT_ALT);
   }
-  if (modifier_keys & MODIFIER_GUI) {
+  if (modifierKeys & MODIFIER_GUI) {
     Keyboard_press(KEY_LEFT_GUI);
   }
   if (value != KEY_NONE) {
@@ -249,22 +250,28 @@ void pressKey(uint8_t modifier_keys, char value) {
   }
 }
 
-void releaseKey(uint8_t modifier_keys, char value) {
-  if (modifier_keys & MODIFIER_CTRL) {
+void releaseKey(uint8_t modifierKeys, char value) {
+  if (modifierKeys & MODIFIER_CTRL) {
     Keyboard_release(KEY_LEFT_CTRL);
   }
-  if (modifier_keys & MODIFIER_SHIFT) {
+  if (modifierKeys & MODIFIER_SHIFT) {
     Keyboard_release(KEY_LEFT_SHIFT);
   }
-  if (modifier_keys & MODIFIER_ALT) {
+  if (modifierKeys & MODIFIER_ALT) {
     Keyboard_release(KEY_LEFT_ALT);
   }
-  if (modifier_keys & MODIFIER_GUI) {
+  if (modifierKeys & MODIFIER_GUI) {
     Keyboard_release(KEY_LEFT_GUI);
   }
   if (value != KEY_NONE) {
     Keyboard_release(value);
   }
+}
+
+void pressAndReleaseKey(uint8_t modifierKeys, char value) {
+  pressKey(modifierKeys, value);
+  delay(1);
+  releaseKey(modifierKeys, value);
 }
 
 void writeString(uint8_t ind) {
@@ -309,6 +316,9 @@ void toggleMouseButton(uint8_t button, uint8_t ind) {
 
 void handleKeyPress(uint8_t ind) {
     switch(KEY_ACTION_TYPE[ind]) {
+      case ACTION_TYPE_KEY_PRESS:
+        pressAndReleaseKey(KEY_MODIFIER_KEYS[ind], KEY_VALUE[ind]);
+        break;
       case ACTION_TYPE_KEY_DOWN_UP:
         pressKey(KEY_MODIFIER_KEYS[ind], KEY_VALUE[ind]);
         break;
@@ -334,6 +344,9 @@ void handleKeyPress(uint8_t ind) {
 
 void handleKeyRelease(uint8_t ind) {
     switch(KEY_ACTION_TYPE[ind]) {
+      case ACTION_TYPE_KEY_PRESS:
+        // No action for key press on key release
+        break;
       case ACTION_TYPE_KEY_DOWN_UP:
         releaseKey(KEY_MODIFIER_KEYS[ind], KEY_VALUE[ind]);
         break;
