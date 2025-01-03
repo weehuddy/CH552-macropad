@@ -88,7 +88,8 @@ __xdata uint8_t ledData[NUM_BYTES];
  * USER CONFIGURATION START
  */
 bool INVERT_SCROLLING = false;
-bool ALLOW_BOOTLOADER = true;
+bool ALLOW_BOOTLOADER_FROM_BOOT = true;
+bool ALLOW_BOOTLOADER_FROM_RUN = false;
 
 uint8_t LED_COLORS[MAX_KEYS][3] = {
   {255, 0, 0}, // Button 1 LED color: red, green, blue
@@ -427,6 +428,11 @@ void setup() {
   enterBootloaderMs = millis();
   encoderALastState = digitalRead(ENC_A_PIN);
   USBInit();
+  if (ALLOW_BOOTLOADER_FROM_BOOT) {
+    if (digitalRead(KEY0_PIN) == KEY_PRESSED && digitalRead(KEY1_PIN) == KEY_PRESSED && digitalRead(KEY2_PIN) == KEY_PRESSED) {
+      enterBootloader();
+    }
+  }
 }
 
 void loop() {
@@ -476,7 +482,7 @@ void loop() {
   }
 
   // Check if we should enter bootloader (encoder button held for 3 seconds)
-  if (ALLOW_BOOTLOADER) {
+  if (ALLOW_BOOTLOADER_FROM_RUN) {
     if (keyState[ENCODER_INDEX] == KEY_PRESSED) {
       if (millis() - enterBootloaderMs > ENTER_BOOTLOADER_MS) {
         handleKeyRelease(ENCODER_INDEX); // Simulate releasing the encoder button

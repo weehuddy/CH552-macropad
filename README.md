@@ -86,6 +86,7 @@ If a key action has been set to `ACTION_TYPE_MOUSE_CLICK`, `ACTION_TYPE_MOUSE_DO
 - `MOUSE_RIGHT`
 
 
-Additionally, there are two other configurable options:
+Additionally, there are three other configurable options:
 - `INVERT_SCROLLING`: This inverts the direction that scrolling occurs. You may find this useful depending on how your computer scrolling is configured
-- `ALLOW_BOOTLOADER`: This allows the device to be reprogrammed without taking it apart, but it also means that you cannot assign an action that requires holding the encoder button down for more than three seconds
+- `ALLOW_BOOTLOADER_FROM_BOOT`: This allows the device to be reprogrammed without taking it apart. If the first three keys are held when the device powers on, it enters bootloader mode for a few seconds. This mode is recommended, as it won't conflict with assigned actions, but it does require the device to be unplugged and replugged in to enter bootloader
+- `ALLOW_BOOTLOADER_FROM_RUN`: This allows the device to be reprogrammed without taking it apart. If the encoder button is held for three seconds, it enters bootloader mode for a few seconds. This requires a device with an encoder wheel (unlike the four key variant) and also means that you cannot assign an action that requires holding the encoder button down for more than three seconds
