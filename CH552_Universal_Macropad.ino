@@ -6,9 +6,9 @@
 // 1.1 - Key U1
 // 1.7 - Key U2
 // 1.6 - Key U3
-// ??? - Key U4 - I will update these once I get a six-key device
-// ??? - Key U5
-// ??? - Key U6
+// 1.5 - Key U4 
+// 1.4 - Key U5
+// 3.2 - Key U6
 
 #define SERIAL_DEBUG  false
 
@@ -42,9 +42,9 @@
 #define KEY0_PIN        11
 #define KEY1_PIN        17
 #define KEY2_PIN        16
-#define KEY3_PIN        12 // TODO: VERIFY
-#define KEY4_PIN        13 // TODO: VERIFY
-#define KEY5_PIN        14 // TODO: VERIFY
+#define KEY3_PIN        15 
+#define KEY4_PIN        14 
+#define KEY5_PIN        32 
 #define ENC_A_PIN       30
 #define ENC_B_PIN       31
 #define BUTTON_PIN      33
